@@ -1,10 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import ReactFlow, {
     Background,
     Controls,
-    applyEdgeChanges,
-    applyNodeChanges,
-    addEdge
+    addEdge,
+    useEdgesState,
+    useNodesState,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -33,20 +33,12 @@ const initialEdges = [
 ];
 
 function Flow() {
-    const [nodes, setNodes] = useState(initialNodes);
-    const [edges, setEdges] = useState(initialEdges);
+    const [nodes, , onNodesChange] = useNodesState(initialNodes);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
-    const onNodesChange = useCallback(
-        (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-        []
-    );
-    const onEdgesChange = useCallback(
-        (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-        []
-    );
     const onConnect = useCallback(
         (params) => setEdges((eds) => addEdge(params, eds)),
-        []
+        [setEdges]
     );
 
     return (
