@@ -49,8 +49,9 @@ function Flow() {
                 edges={edges}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
+                fitView
             >
-                <Background variant='lines' gap='40' lineWidth='0.7' />
+                <Background variant='lines' gap='60' lineWidth='0.7' />
                 <Controls />
             </ReactFlow>
         </div>
