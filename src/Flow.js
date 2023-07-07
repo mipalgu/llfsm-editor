@@ -9,6 +9,8 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
+import LLFSMEdge from './LLFSMEdge';
+
 const initialNodes = [
     {
         id: '1',
@@ -29,16 +31,28 @@ const initialEdges = [
         source: '1',
         target: '2',
         label: 'to the',
-        type: 'step'
+        type: 'llfsm'
     }
 ];
+
+const edgeTypes = {
+    llfsm: LLFSMEdge
+}
 
 function Flow() {
     const [nodes, , onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
+    const onConnectStart = (_, { nodeId, handleType }) =>
+        console.log('on connect start', { nodeId, handleType });
+    const onConnectEnd = (event) => console.log('on connect end', event);
+
     const onConnect = useCallback(
-        (params) => setEdges((eds) => addEdge(params, eds)),
+        (params) => {
+            params.type = 'llfsm'
+            console.log('on connect', { params });
+            setEdges((eds) => addEdge(params, eds))
+        },
         [setEdges]
     );
 
@@ -50,6 +64,9 @@ function Flow() {
                 edges={edges}
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
+                onConnectStart={onConnectStart}
+                onConnectEnd={onConnectEnd}
+                edgeTypes={edgeTypes}
                 fitView
             >
                 <Background variant='lines' gap='60' lineWidth='0.7' />
