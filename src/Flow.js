@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import ReactFlow, {
     Background,
     Controls,
+    MiniMap,
     addEdge,
     useEdgesState,
     useNodesState,
@@ -53,6 +54,7 @@ function Flow() {
             >
                 <Background variant='lines' gap='60' lineWidth='0.7' />
                 <Controls />
+                <MiniMap pannable='true' />
             </ReactFlow>
         </div>
     );
