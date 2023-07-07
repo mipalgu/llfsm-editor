@@ -1,7 +1,8 @@
-import ReactFlow, { Background, Controls } from 'reactflow';
+import { useState, useCallback } from 'react';
+import ReactFlow, { Background, Controls, applyEdgeChanges, applyNodeChanges } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-const nodes = [
+const initialNodes = [
     {
         id: '1',
         position: { x: 0, y: 0 },
@@ -15,7 +16,7 @@ const nodes = [
     },
 ];
 
-const edges = [
+const initialEdges = [
     {
         id: '1-2',
         source: '1',
@@ -26,9 +27,26 @@ const edges = [
 ];
 
 function Flow() {
+    const [nodes, setNodes] = useState(initialNodes);
+    const [edges, setEdges] = useState(initialEdges);
+
+    const onNodesChange = useCallback(
+        (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+        []
+    );
+    const onEdgesChange = useCallback(
+        (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+        []
+    );
+
     return (
         <div style={{ height: '100%'}}>
-            <ReactFlow nodes={nodes} edges={edges}>
+            <ReactFlow
+                nodes={nodes}
+                onNodesChange={onNodesChange}
+                edges={edges}
+                onEdgesChange={onEdgesChange}
+            >
                 <Background />
                 <Controls />
             </ReactFlow>
