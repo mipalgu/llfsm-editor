@@ -58,7 +58,7 @@ function Flow() {
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
             >
-                <Background />
+                <Background variant='lines' gap='40' lineWidth='0.7' />
                 <Controls />
             </ReactFlow>
         </div>
