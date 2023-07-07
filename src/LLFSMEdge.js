@@ -1,5 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BaseEdge, EdgeLabelRenderer, getBezierPath } from 'reactflow';
+
+function EdgeLabel({ transform, label }) {
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          background: 'transparent',
+          padding: 10,
+          fontSize: 12,
+          transform,
+        }}
+        className="nodrag nopan"
+      >
+        {label}
+      </div>
+    );
+  }
 
 export default function LLFSMEdge({
     id,
@@ -11,6 +28,7 @@ export default function LLFSMEdge({
     targetPosition,
     style = {},
     markerEnd,
+    data
   }) {
     const [edgePath, labelX, labelY] = getBezierPath({
       sourceX,
@@ -20,24 +38,24 @@ export default function LLFSMEdge({
       targetY,
       targetPosition,
     });
+
+    const [startLabel, setStartLabel] = useState(data ? data.startLabel ?? 'start' : 'start');
+    const [condition, setCondition] = useState(data ? data.condition ?? 'true' : 'true');
+
+    console.log(data)
   
     return (
       <>
         <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
         <EdgeLabelRenderer>
-          <div
-            style={{
-              position: 'absolute',
-              transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-              fontSize: 12,
-              // everything inside EdgeLabelRenderer has no pointer events by default
-              // if you have an interactive element, set pointer-events: all
-              pointerEvents: 'all',
-            }}
-            className="nodrag nopan"
-          >
-            label
-          </div>
+            <EdgeLabel
+                transform={`translate(-50%, 0%) translate(${sourceX}px,${sourceY}px)`}
+                label={startLabel}
+            />
+            <EdgeLabel
+                transform={`translate(-50%, -50%) translate(${labelX}px,${labelY}px)`}
+                label={condition}
+            />
         </EdgeLabelRenderer>
       </>
     );
