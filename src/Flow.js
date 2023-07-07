@@ -1,5 +1,11 @@
 import { useState, useCallback } from 'react';
-import ReactFlow, { Background, Controls, applyEdgeChanges, applyNodeChanges } from 'reactflow';
+import ReactFlow, {
+    Background,
+    Controls,
+    applyEdgeChanges,
+    applyNodeChanges,
+    addEdge
+} from 'reactflow';
 import 'reactflow/dist/style.css';
 
 const initialNodes = [
@@ -38,6 +44,10 @@ function Flow() {
         (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
         []
     );
+    const onConnect = useCallback(
+        (params) => setEdges((eds) => addEdge(params, eds)),
+        []
+    );
 
     return (
         <div style={{ height: '100%'}}>
@@ -46,6 +56,7 @@ function Flow() {
                 onNodesChange={onNodesChange}
                 edges={edges}
                 onEdgesChange={onEdgesChange}
+                onConnect={onConnect}
             >
                 <Background />
                 <Controls />
