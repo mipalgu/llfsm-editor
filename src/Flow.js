@@ -6,6 +6,7 @@ import ReactFlow, {
     MiniMap,
     addEdge,
     applyEdgeChanges,
+    applyNodeChanges,
     useEdgesState,
     useNodesState,
 } from 'reactflow';
@@ -57,12 +58,19 @@ const edgeTypes = {
 }
 
 function Flow() {
-    const [nodes, , onNodesChange] = useNodesState(initialNodes);
+    const [nodes, setNodes] = useNodesState(initialNodes);
     const [edges, setEdges] = useEdgesState(initialEdges);
 
     const onConnectStart = (_, { nodeId, handleType }) =>
         console.log('on connect start', { nodeId, handleType });
     const onConnectEnd = (event) => console.log('on connect end', event);
+
+    const onNodesChange = useCallback(
+        (changes) => {
+            setNodes((nds) => applyNodeChanges(changes, nds));
+        },
+        [setNodes]
+    );
 
     const onEdgesChange = useCallback(
         (changes) => {
