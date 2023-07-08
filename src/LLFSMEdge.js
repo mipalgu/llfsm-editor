@@ -42,10 +42,8 @@ export default function LLFSMEdge({
     const [startLabel, setStartLabel] = useState(data ? data.priority ?? '0' : '0');
     const [condition, setCondition] = useState(data ? data.condition ?? 'true' : 'true');
 
-    useEffect(() => {
-        setStartLabel(`${data.priority}`);
-        setCondition(`${data.condition ?? ''}`);
-    }, [data])
+    useEffect(() => setStartLabel(`${data.priority}`), [data.priority]);
+    useEffect(() => setCondition(`${data.condition ?? ''}`), [data.condition]);
   
     return (
       <>

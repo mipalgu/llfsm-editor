@@ -10,6 +10,7 @@ import ReactFlow, {
     useNodesState,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
+import * as uuid from 'uuid';
 
 import LLFSMEdge from './LLFSMEdge';
 
@@ -81,7 +82,7 @@ function Flow() {
             setEdges((eds) => addEdge(
                 {
                     ...params,
-                    id: (eds ?? []).length,
+                    id: `${uuid.v4()}`,
                     type: 'llfsm',
                     markerEnd: { type: MarkerType.ArrowClosed },
                     data: {
