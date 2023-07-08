@@ -13,23 +13,26 @@ import 'reactflow/dist/style.css';
 import * as uuid from 'uuid';
 
 import LLFSMEdge from './LLFSMEdge';
+import State from './State';
 
 const initialNodes = [
     {
         id: '1',
         position: { x: 0, y: 0 },
         data: { label: 'Hello' },
-        type: 'input'
+        type: 'state'
     },
     {
         id: '2',
         position: { x: 100, y: 100},
-        data: { label: 'World' }
+        data: { label: 'World' },
+        type: 'state'
     },
     {
         id: '3',
         position: { x: -100, y: -100},
-        data: { label: '!' }
+        data: { label: '!' },
+        type: 'state'
     },
 ];
 
@@ -44,6 +47,10 @@ const initialEdges = [
         }
     }
 ];
+
+const nodeTypes = {
+    state: State
+}
 
 const edgeTypes = {
     llfsm: LLFSMEdge
@@ -116,6 +123,7 @@ function Flow() {
                 onConnect={onConnect}
                 onConnectStart={onConnectStart}
                 onConnectEnd={onConnectEnd}
+                nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
                 fitView
             >
