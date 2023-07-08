@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { Handle, Position } from "reactflow";
 
 function State({ data, isConnectable }) {
-    const [name, setName] = useState('Name');
+    const [name, setName] = useState(data.name);
     const [onEntry, setOnEntry] = useState('');
 
     const onChange = useCallback((evt) => {

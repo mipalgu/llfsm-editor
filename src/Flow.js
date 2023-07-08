@@ -4,11 +4,14 @@ import ReactFlow, {
     Controls,
     MarkerType,
     MiniMap,
+    Panel,
     addEdge,
     applyEdgeChanges,
     applyNodeChanges,
     useEdgesState,
     useNodesState,
+    useReactFlow,
+    useUpdateNodeInternals,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import * as uuid from 'uuid';
@@ -18,21 +21,21 @@ import State from './State';
 
 const initialNodes = [
     {
-        id: '1',
+        id: `${uuid.v4()}`,
         position: { x: 0, y: 0 },
-        data: { label: 'Hello' },
+        data: { name: 'Hello' },
         type: 'state'
     },
     {
-        id: '2',
+        id: `${uuid.v4()}`,
         position: { x: 100, y: 100},
-        data: { label: 'World' },
+        data: { name: 'World' },
         type: 'state'
     },
     {
-        id: '3',
+        id: `${uuid.v4()}`,
         position: { x: -100, y: -100},
-        data: { label: '!' },
+        data: { name: '!' },
         type: 'state'
     },
 ];
@@ -45,7 +48,7 @@ const initialEdges = [
         data: {
             priority: 0,
             condition: 'true'
-        }
+        },
     }
 ];
 
@@ -60,6 +63,7 @@ const edgeTypes = {
 function Flow() {
     const [nodes, setNodes] = useNodesState(initialNodes);
     const [edges, setEdges] = useEdgesState(initialEdges);
+    const reactFlow = useReactFlow();
 
     const onConnectStart = (_, { nodeId, handleType }) =>
         console.log('on connect start', { nodeId, handleType });
@@ -67,9 +71,25 @@ function Flow() {
 
     const onNodesChange = useCallback(
         (changes) => {
+            console.log("nodes change.")
             setNodes((nds) => applyNodeChanges(changes, nds));
         },
         [setNodes]
+    );
+
+    const addNode = useCallback(
+        () => {
+            const newNode = {
+                id: `${uuid.v4()}`,
+                position: { x: 0, y: 0 },
+                data: { name: '<State>' },
+                type: 'state',
+                width: 100,
+                height: 100
+            };
+            reactFlow.addNodes(newNode);
+        },
+        [reactFlow]
     );
 
     const onEdgesChange = useCallback(
@@ -135,6 +155,7 @@ function Flow() {
                 edgeTypes={edgeTypes}
                 fitView
             >
+                <Panel position="top-left"><button onClick={addNode}>Add Node</button></Panel>
                 <Background variant='lines' gap='60' lineWidth='0.7' />
                 <Controls />
                 <MiniMap pannable='true' />

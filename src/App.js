@@ -1,11 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
 import Flow from './Flow.js'
+import { ReactFlowProvider } from 'reactflow';
 
 function App() {
   return (
     <div className="App">
-      <Flow />
+      <ReactFlowProvider>
+        <Flow />
+      </ReactFlowProvider>
     </div>
   );
 }
