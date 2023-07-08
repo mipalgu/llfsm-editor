@@ -5,6 +5,7 @@ import ReactFlow, {
     MarkerType,
     MiniMap,
     addEdge,
+    applyEdgeChanges,
     useEdgesState,
     useNodesState,
 } from 'reactflow';
@@ -24,18 +25,14 @@ const initialNodes = [
         position: { x: 100, y: 100},
         data: { label: 'World' }
     },
+    {
+        id: '3',
+        position: { x: -100, y: -100},
+        data: { label: '!' }
+    },
 ];
 
-const initialEdges = [
-    {
-        id: '1-2',
-        source: '1',
-        target: '2',
-        label: 'to the',
-        type: 'llfsm',
-        markerEnd: { type: MarkerType.ArrowClosed }
-    }
-];
+const initialEdges = [];
 
 const edgeTypes = {
     llfsm: LLFSMEdge
@@ -43,17 +40,54 @@ const edgeTypes = {
 
 function Flow() {
     const [nodes, , onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [edges, setEdges] = useEdgesState(initialEdges);
 
     const onConnectStart = (_, { nodeId, handleType }) =>
         console.log('on connect start', { nodeId, handleType });
     const onConnectEnd = (event) => console.log('on connect end', event);
 
+    const onEdgesChange = useCallback(
+        (changes) => {
+            console.log(changes)
+            let localEdges = edges ?? [];
+            console.log(localEdges);
+            changes.forEach((change) => {
+                if (change.type !== 'remove') {
+                    return;
+                }
+                const edgeIndex = localEdges.findIndex((elem) => elem.id === change.id);
+                if (edgeIndex < 0) {
+                    return;
+                }
+                const edge = localEdges[edgeIndex];
+                localEdges.forEach((elem) => {
+                    if (elem.source !== edge.source
+                            || elem.data.priority < edge.data.priority
+                            || elem.id === edge.id
+                    ) {
+                        return
+                    }
+                    elem.data.priority = elem.data.priority - 1;
+                });
+            });
+            setEdges(applyEdgeChanges(changes, localEdges));
+        },
+        [edges, setEdges]
+    );
+
     const onConnect = useCallback(
         (params) => {
             console.log('on connect', { params });
             setEdges((eds) => addEdge(
-                { ...params, type: 'llfsm', markerEnd: { type: MarkerType.ArrowClosed } },
+                {
+                    ...params,
+                    id: (eds ?? []).length,
+                    type: 'llfsm',
+                    markerEnd: { type: MarkerType.ArrowClosed },
+                    data: {
+                        priority: (eds ?? []).length
+                    }
+                },
                 eds
             ))
         },

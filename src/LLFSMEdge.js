@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BaseEdge, EdgeLabelRenderer, getBezierPath } from 'reactflow';
 
 function EdgeLabel({ transform, label }) {
@@ -39,10 +39,13 @@ export default function LLFSMEdge({
       targetPosition,
     });
 
-    const [startLabel, setStartLabel] = useState(data ? data.startLabel ?? 'start' : 'start');
+    const [startLabel, setStartLabel] = useState(data ? data.priority ?? '0' : '0');
     const [condition, setCondition] = useState(data ? data.condition ?? 'true' : 'true');
 
-    console.log(markerEnd)
+    useEffect(() => {
+        setStartLabel(`${data.priority}`);
+        setCondition(`${data.condition ?? ''}`);
+    }, [data])
   
     return (
       <>
