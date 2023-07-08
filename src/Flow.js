@@ -103,7 +103,7 @@ function Flow() {
                     type: 'llfsm',
                     markerEnd: { type: MarkerType.ArrowClosed },
                     data: {
-                        priority: (eds ?? []).length,
+                        priority: (eds ?? []).filter((elem) => elem.source === params.source).length,
                         condition: 'true'
                     }
                 },
