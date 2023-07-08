@@ -18,6 +18,7 @@ import * as uuid from 'uuid';
 
 import LLFSMEdge from './LLFSMEdge';
 import State from './State';
+import Settings from './Settings';
 
 const initialNodes = [
     {
@@ -159,6 +160,7 @@ function Flow() {
                 <Background variant='lines' gap='60' lineWidth='0.7' />
                 <Controls />
                 <MiniMap pannable='true' />
+                <Panel position="top-right"><Settings /></Panel>
             </ReactFlow>
         </div>
     );
