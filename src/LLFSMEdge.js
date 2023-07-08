@@ -3,20 +3,20 @@ import { BaseEdge, EdgeLabelRenderer, getBezierPath } from 'reactflow';
 
 function EdgeLabel({ transform, label }) {
     return (
-      <div
-        style={{
-          position: 'absolute',
-          background: 'transparent',
-          padding: 10,
-          fontSize: 12,
-          transform,
-        }}
-        className="nodrag nopan"
-      >
-        {label}
-      </div>
+        <div
+            style={{
+                position: 'absolute',
+                background: 'transparent',
+                padding: 10,
+                fontSize: 12,
+                transform,
+            }}
+            className="nodrag nopan"
+        >
+            {label}
+        </div>
     );
-  }
+}
 
 export default function LLFSMEdge({
     id,
@@ -39,8 +39,8 @@ export default function LLFSMEdge({
       targetPosition,
     });
 
-    const [startLabel, setStartLabel] = useState(data ? data.priority ?? '0' : '0');
-    const [condition, setCondition] = useState(data ? data.condition ?? 'true' : 'true');
+    const [startLabel, setStartLabel] = useState(data ? (data.priority ?? 0) : 0);
+    const [condition, setCondition] = useState(data ? (data.condition ?? 'true') : 'true');
 
     useEffect(() => setStartLabel(`${data.priority}`), [data.priority]);
     useEffect(() => setCondition(`${data.condition ?? ''}`), [data.condition]);

@@ -33,7 +33,17 @@ const initialNodes = [
     },
 ];
 
-const initialEdges = [];
+const initialEdges = [
+    {
+        id: `${uuid.v4()}`,
+        source: '1',
+        target: '2',
+        data: {
+            priority: 0,
+            condition: 'true'
+        }
+    }
+];
 
 const edgeTypes = {
     llfsm: LLFSMEdge
@@ -86,7 +96,8 @@ function Flow() {
                     type: 'llfsm',
                     markerEnd: { type: MarkerType.ArrowClosed },
                     data: {
-                        priority: (eds ?? []).length
+                        priority: (eds ?? []).length,
+                        condition: 'true'
                     }
                 },
                 eds
