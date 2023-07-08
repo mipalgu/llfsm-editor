@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import ReactFlow, {
     Background,
     Controls,
+    MarkerType,
     MiniMap,
     addEdge,
     useEdgesState,
@@ -31,7 +32,8 @@ const initialEdges = [
         source: '1',
         target: '2',
         label: 'to the',
-        type: 'llfsm'
+        type: 'llfsm',
+        markerEnd: { type: MarkerType.ArrowClosed }
     }
 ];
 
@@ -49,9 +51,11 @@ function Flow() {
 
     const onConnect = useCallback(
         (params) => {
-            params.type = 'llfsm'
             console.log('on connect', { params });
-            setEdges((eds) => addEdge(params, eds))
+            setEdges((eds) => addEdge(
+                { ...params, type: 'llfsm', markerEnd: { type: MarkerType.ArrowClosed } },
+                eds
+            ))
         },
         [setEdges]
     );

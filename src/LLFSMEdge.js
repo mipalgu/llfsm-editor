@@ -42,7 +42,7 @@ export default function LLFSMEdge({
     const [startLabel, setStartLabel] = useState(data ? data.startLabel ?? 'start' : 'start');
     const [condition, setCondition] = useState(data ? data.condition ?? 'true' : 'true');
 
-    console.log(data)
+    console.log(markerEnd)
   
     return (
       <>
