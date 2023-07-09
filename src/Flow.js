@@ -5,6 +5,7 @@ import ReactFlow, {
     MarkerType,
     MiniMap,
     Panel,
+    Position,
     addEdge,
     applyEdgeChanges,
     applyNodeChanges,
@@ -20,38 +21,70 @@ import LLFSMEdge from './LLFSMEdge';
 import State from './State';
 import Settings from './Settings';
 
-const initialNodes = [
-    {
+const initialNodes = (() => {
+    const sourceHandle = {
         id: `${uuid.v4()}`,
-        position: { x: 0, y: 0 },
-        data: { name: 'Hello' },
-        type: 'state'
-    },
-    {
+        type: 'source',
+        position: Position.Bottom
+    }
+
+    const targetHandle = {
         id: `${uuid.v4()}`,
-        position: { x: 100, y: 100},
-        data: { name: 'World' },
-        type: 'state'
-    },
-    {
-        id: `${uuid.v4()}`,
-        position: { x: -100, y: -100},
-        data: { name: '!' },
-        type: 'state'
-    },
-];
+        type: 'target',
+        position: Position.Top
+    }
+    let temp = [
+        {
+            id: `${uuid.v4()}`,
+            position: { x: 0, y: 0 },
+            data: {
+                name: 'Hello',
+                handles: {},
+            },
+            type: 'state'
+        },
+        {
+            id: `${uuid.v4()}`,
+            position: { x: 100, y: 100},
+            data: {
+                name: 'World',
+                handles: {}
+            },
+            type: 'state'
+        },
+        {
+            id: `${uuid.v4()}`,
+            position: { x: -100, y: -100},
+            data: {
+                name: '!',
+                handles: {}
+            },
+            type: 'state'
+        },
+    ]
+    temp[0].data.handles[sourceHandle.id] = sourceHandle;
+    temp[1].data.handles[targetHandle.id] = targetHandle;
+    return temp
+})();
+
+console.log(initialNodes)
 
 const initialEdges = [
     {
         id: `${uuid.v4()}`,
-        source: '1',
-        target: '2',
+        source: initialNodes[0].id,
+        target: initialNodes[1].id,
+        sourceHandle: Object.keys(initialNodes[0].data.handles)[0],
+        targetHandle: Object.keys(initialNodes[1].data.handles)[0],
+        markerEnd: MarkerType.ArrowClosed,
         data: {
             priority: 0,
             condition: 'true'
         },
     }
 ];
+
+console.log(initialEdges);
 
 const nodeTypes = {
     state: State
@@ -107,6 +140,14 @@ function Flow() {
                     return;
                 }
                 const edge = localEdges[edgeIndex];
+                const sourceNode = nodes.find((node) => node.id === edge.source);
+                const targetNode = nodes.find((node) => node.id === edge.target);
+                if (sourceNode) {
+                    delete sourceNode.data.handles[edge.sourceHandle];
+                }
+                if (targetNode) {
+                    delete targetNode.data.handles[edge.targetHandle];
+                }
                 localEdges.forEach((elem) => {
                     if (elem.source !== edge.source
                             || elem.data.priority < edge.data.priority
@@ -119,7 +160,7 @@ function Flow() {
             });
             setEdges(applyEdgeChanges(changes, localEdges));
         },
-        [edges, setEdges]
+        [nodes, edges, setEdges]
     );
 
     const onConnect = useCallback(
