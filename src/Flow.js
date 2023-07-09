@@ -118,7 +118,10 @@ function Flow() {
             const newNode = {
                 id: `${uuid.v4()}`,
                 position: { x: 0, y: 0 },
-                data: { name: '<State>' },
+                data: {
+                    name: '<State>',
+                    handles: {}
+                },
                 type: 'state',
                 width: 100,
                 height: 100
