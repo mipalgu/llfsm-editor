@@ -175,9 +175,16 @@ function Flow() {
             const sourceNode = nodes.find((node) => node.id === params.source);
             const targetNode = nodes.find((node) => node.id === params.target);
             if (!sourceNode || !targetNode) { return; }
-            const intersectionPoint = getNodeIntersection(sourceNode, targetNode);
-            const sourcePosition = getEdgePosition(sourceNode, intersectionPoint);
-            const targetPosition = getEdgePosition(targetNode, intersectionPoint);
+            let sourcePosition;
+            let targetPosition;
+            if (sourceNode.id === targetNode.id) {
+                sourcePosition = Position.Top;
+                targetPosition = Position.Top;
+            } else {
+                const intersectionPoint = getNodeIntersection(sourceNode, targetNode);
+                sourcePosition = getEdgePosition(sourceNode, intersectionPoint);
+                targetPosition = getEdgePosition(targetNode, intersectionPoint);
+            }
             const sourceHandle = {
                 id: `${uuid.v4()}`,
                 type: 'source',
