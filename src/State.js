@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
-import { Handle, Position, useKeyPress, useStore } from "reactflow";
+import { Handle, NodeResizer, Position, useKeyPress, useStore } from "reactflow";
 
 const connectionNodeIdSelector = (state) => state.connectionNodeId;
 
 const sourceStyle = { zIndex: 1 };
 
-function State({ id, data, isConnectable }) {
+function State({ id, data, isConnectable, selected }) {
     const [name, setName] = useState(data.name);
     const [onEntry, setOnEntry] = useState('');
     const ctrlPressed = useKeyPress('Control');
@@ -23,6 +23,7 @@ function State({ id, data, isConnectable }) {
     });
     return (
         <div className="state-node">
+            <NodeResizer isVisible={selected} minWidth={100} minHeight={30} />
             {!isConnecting && ctrlPressed && (
                 <Handle
                     className="customHandle"
