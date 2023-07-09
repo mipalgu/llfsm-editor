@@ -5,10 +5,15 @@
 
 .state-node {
   border: 1px solid #eee;
-  padding: 5px;
   border-radius: 5px;
   background: white;
+  overflow: auto;
 }
+
+.state-node .content {
+  padding: 5px;
+}
+
 
 .state-node.focus {
   border: 1px solid #00eeff;

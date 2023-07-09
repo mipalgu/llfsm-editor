@@ -22,8 +22,8 @@ function State({ id, data, isConnectable, selected }) {
         return <Handle key={key} id={handle.id} type={handle.type} position={handle.position} isConnectable={false} style={{visibility: 'hidden'}} />
     });
     return (
-        <div className="state-node">
-            <NodeResizer isVisible={selected} minWidth={100} minHeight={30} />
+        <div className="state-node" style={{ height: "100%" }}>
+            <NodeResizer isVisible={selected} minWidth={189} minHeight={30} />
             {!isConnecting && ctrlPressed && (
                 <Handle
                     className="customHandle"
@@ -36,7 +36,7 @@ function State({ id, data, isConnectable, selected }) {
                 <Handle className="customHandle" position={Position.Left} type="target" />
             )}
             {handleElements}
-            <div>
+            <div className="content">
                 <label className="title">{name}</label>
                 <label htmlFor="text" className="action">OnEntry:</label>
                 <input id="text" name="text" onChange={onChange} className="nodrag implementation" value={onEntry} />
