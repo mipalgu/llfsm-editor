@@ -77,6 +77,7 @@ const initialEdges = [
         sourceHandle: Object.keys(initialNodes[0].data.handles)[0],
         targetHandle: Object.keys(initialNodes[1].data.handles)[0],
         markerEnd: MarkerType.ArrowClosed,
+        type: 'llfsm',
         data: {
             priority: 0,
             condition: 'true'
@@ -98,6 +99,7 @@ function Flow() {
     const [nodes, setNodes] = useNodesState(initialNodes);
     const [edges, setEdges] = useEdgesState(initialEdges);
     const reactFlow = useReactFlow();
+    const updateNodeInternals = useUpdateNodeInternals();
 
     const onConnectStart = (_, { nodeId, handleType }) =>
         console.log('on connect start', { nodeId, handleType });
@@ -166,12 +168,32 @@ function Flow() {
     const onConnect = useCallback(
         (params) => {
             console.log('on connect', { params });
+            const sourceNode = nodes.find((node) => node.id === params.source);
+            const targetNode = nodes.find((node) => node.id === params.target);
+            if (!sourceNode || !targetNode) { return; }
+            const sourceHandle = {
+                id: `${uuid.v4()}`,
+                type: 'source',
+                position: Position.Bottom
+            }
+        
+            const targetHandle = {
+                id: `${uuid.v4()}`,
+                type: 'target',
+                position: Position.Top
+            }
+            sourceNode.data.handles[sourceHandle.id] = sourceHandle;
+            targetNode.data.handles[targetHandle.id] = targetHandle;
+            updateNodeInternals(sourceNode.id);
+            updateNodeInternals(targetNode.id);
             setEdges((eds) => addEdge(
                 {
                     ...params,
                     id: `${uuid.v4()}`,
                     type: 'llfsm',
                     markerEnd: { type: MarkerType.ArrowClosed },
+                    "sourceHandle": sourceHandle.id,
+                    "targetHandle": targetHandle.id,
                     data: {
                         priority: (eds ?? []).filter((elem) => elem.source === params.source).length,
                         condition: 'true'
@@ -180,7 +202,7 @@ function Flow() {
                 eds
             ))
         },
-        [setEdges]
+        [setEdges, nodes, updateNodeInternals]
     );
 
     return (

@@ -47,7 +47,7 @@ export default function LLFSMEdge({
   
     return (
       <>
-        <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />
+        <BaseEdge id={id} path={edgePath} markerEnd={markerEnd} style={style} />
         <EdgeLabelRenderer>
             <EdgeLabel
                 transform={`translate(-50%, 0%) translate(${sourceX}px,${sourceY}px)`}
