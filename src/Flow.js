@@ -20,6 +20,7 @@ import * as uuid from 'uuid';
 import LLFSMEdge from './LLFSMEdge';
 import State from './State';
 import Settings from './Settings';
+import { getNodeIntersection, getEdgePosition } from './utils.js';
 
 const initialNodes = (() => {
     const sourceHandle = {
@@ -174,16 +175,19 @@ function Flow() {
             const sourceNode = nodes.find((node) => node.id === params.source);
             const targetNode = nodes.find((node) => node.id === params.target);
             if (!sourceNode || !targetNode) { return; }
+            const intersectionPoint = getNodeIntersection(sourceNode, targetNode);
+            const sourcePosition = getEdgePosition(sourceNode, intersectionPoint);
+            const targetPosition = getEdgePosition(targetNode, intersectionPoint);
             const sourceHandle = {
                 id: `${uuid.v4()}`,
                 type: 'source',
-                position: Position.Bottom
+                position: sourcePosition
             }
         
             const targetHandle = {
                 id: `${uuid.v4()}`,
                 type: 'target',
-                position: Position.Top
+                position: targetPosition
             }
             sourceNode.data.handles[sourceHandle.id] = sourceHandle;
             targetNode.data.handles[targetHandle.id] = targetHandle;
